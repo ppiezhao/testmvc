@@ -5,9 +5,11 @@
 abstract class Mmvc_Controller_Abstract
 {
 	protected $_view = null;
-	public function __construct($view)
+	protected $_request = null;
+	public function __construct($view,$request)
 	{
 		$this->_view = $view;
+		$this->_request = $request;
 	}
 	
 	public function render($tpl = null, $parameters = array())
@@ -26,4 +28,8 @@ abstract class Mmvc_Controller_Abstract
     {
         return $this->_view;
     }
+	public function getRequest()
+	{
+		return $this->_request;
+	}
 }

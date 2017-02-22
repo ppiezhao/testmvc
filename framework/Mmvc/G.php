@@ -10,7 +10,7 @@ class Mmvc_G
         'directory' => null,
         'module_dirctory' => "app",
         'controller_dirctory' => "controllers",
-        'controller_name' => "controller.php",
+        'controller_name' => ".php",
 		'models_dirctory' => "models",
 		'view_dirctory' => "views"
     );

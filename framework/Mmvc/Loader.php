@@ -66,6 +66,7 @@ class Mmvc_Loader
 	
 	public function autoload($class)
 	{
+		echo $class;die;
 		if ($this->isCategoryType($class, self::YAF_LOADER_MODEL)) {
             //this is a model
             $directory = APPLICATION_PATH .

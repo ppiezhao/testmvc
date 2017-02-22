@@ -5,6 +5,7 @@
 class Mmvc_Application
 {
 	public static $_view;
+	public static $_request;
 	public function __construct()
 	{
 	
@@ -15,7 +16,13 @@ class Mmvc_Application
 		$controllerResult = self::GetHttp();
 		$view = self::initView();
 		$controllerName = self::GetControllerName($controllerResult);
-		$controller = new $controllerName($view);
+		$request = self::initRequest();
+		if($controllerResult['query']){
+			$request->setParam($controllerResult['query']);
+		}else{
+			$request->clearParams();
+		}
+		$controller = new $controllerName($view,$request);
 		$actionName = $controllerResult['action']."Action";
 		$controller->$actionName();
 		$controller->render($controllerResult['action'].".php");
@@ -24,17 +31,19 @@ class Mmvc_Application
 	//
 	protected static function GetHttp()
 	{
-		$conFile = Mmvc_G::get('default_controller_dirctory');
-		$conName = Mmvc_G::get('default_controller_name');
+		$conFile = Mmvc_G::get('controller_dirctory');
+		$conName = Mmvc_G::get('controller_name');
 		$url = $_SERVER['REQUEST_URI'];
 		$urlResult = array(
 						'moduel' => 'app',
 						'controller' => 'Index',
-						'action' => 'index'	
+						'action' => 'index',
+						'query' => ''
 					 );
 		if($url != '/'){
 			$urlMid = explode('/',$url);
-			$controllerFile = APPLICATION_PATH . strtolower($urlMid[1]).'/'.$conFile.'/'.ucfirst($urlMid[2]).$conName; 
+			$controllerFile = APPLICATION_PATH .'/'. strtolower($urlMid[1]).'/'.$conFile.'/'.ucfirst($urlMid[2]).$conName; 
+			
 			if (file_exists($controllerFile)) {
 				
 				$urlResult['module'] = strtolower($urlMid[1]);  
@@ -50,6 +59,7 @@ class Mmvc_Application
 				}
 			}else{
 				$controllerFile = APPLICATION_PATH.'/'.$urlResult['moduel'].'/'.$conFile.'/'.ucfirst($urlMid[1]).$conName; 
+				
 				if (file_exists($controllerFile)) {  
 					$urlResult['controller'] = ucfirst($urlMid[1]);
 					$urlResult['action'] = $urlMid[2] ? $urlMid[2] : "index";
@@ -89,5 +99,13 @@ class Mmvc_Application
 			self::$_view = new Mmvc_View_Simple($templates_dir, $options);
 		}
 		return self::$_view;
+	}
+	
+	public static function initRequest()
+	{
+		if (self::$_request == null) {
+			self::$_request = new Mmvc_Request_Http();
+		}
+		return self::$_request;
 	}
 }
