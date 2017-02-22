@@ -13,6 +13,7 @@ class IndexController extends Mmvc_Controller_Abstract
 		echo $class->getRoleInfo();
 		
 		$aaa = "aaa";
+		echo "aaa";
 		$this->getView()->assign("aaa",$aaa);
 	}	
 }
