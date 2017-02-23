@@ -64,8 +64,7 @@ class Mmvc_View_Simple
         }
         // find the script file name using the private method
         $template = $this->_script($tpl);
-        
-		return $this->_run($template, $tplVars);
+        return $this->_run($template, $tplVars);
     }
 	
 	protected function _script($name)

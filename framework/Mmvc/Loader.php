@@ -20,11 +20,21 @@ class Mmvc_Loader
                 $dirs[$key] = $dir . DIRECTORY_SEPARATOR . $dirPath;
 			}
 			$file = basename($file);
-			return self::import($file, $dirs);	
+			return self::import($file, $dirs);
+		} else {
+			$dirPath = dirname(APPLICATION_PATH . $class);
+			$dirs = explode(":", $dirPath);
+			$dirPath = ".";
+			foreach ($dirs as $key => $dir) {
+				$dir = rtrim($dir, '\\/');
+                $dirs[$key] = $dir . DIRECTORY_SEPARATOR . $dirPath;
+			}
+			$class = basename($class);
+			self::import($class, $dirs);
 		} 
 	}
 
-	public static function import($filename, $dirs)
+	public static function import($filename, $dirs = null)
 	{
 		
 		$incPath = false;
@@ -66,7 +76,6 @@ class Mmvc_Loader
 	
 	public function autoload($class)
 	{
-		echo $class;die;
 		if ($this->isCategoryType($class, self::YAF_LOADER_MODEL)) {
             //this is a model
             $directory = APPLICATION_PATH .

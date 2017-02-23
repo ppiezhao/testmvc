@@ -14,6 +14,11 @@ class Mmvc_Application
 	{
 		//获取model，controller
 		$controllerResult = self::GetHttp();
+		if(count($controllerResult) == 1){
+			$url = $controllerResult['url'];
+			Mmvc_Loader::getInstance()->internal_autoload($url);
+			return;
+		}
 		$view = self::initView();
 		$controllerName = self::GetControllerName($controllerResult);
 		$request = self::initRequest();
@@ -26,7 +31,7 @@ class Mmvc_Application
 		$actionName = $controllerResult['action']."Action";
 		$result = $controller->$actionName();
 		if($result !== false){
-			$controller->render($controllerResult['action'].".php");
+			echo $controller->render($controllerResult['action'].".php");
 		}
 	}
 
@@ -44,6 +49,9 @@ class Mmvc_Application
 					 );
 		if($url != '/'){
 			$urlMid = explode('/',$url);
+			if($urlMid[1] == 'public'){
+				return array('url'=>$url);
+			}
 			$controllerFile = APPLICATION_PATH .'/'. strtolower($urlMid[1]).'/'.$conFile.'/'.ucfirst($urlMid[2]).$conName; 
 			
 			if (file_exists($controllerFile)) {

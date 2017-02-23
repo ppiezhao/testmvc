@@ -10,13 +10,27 @@ class IndexController extends Mmvc_Controller_Abstract
 		$request = $this->getRequest()->get("aaa","");
 		print_r($request);
 		echo "<h1>控制器成功！</h1>";
-		$class = new RoleModel();
+		
 		echo "<br/>";
+		$class = new RoleModel();
+		$aaa = "aaa";
+		echo $aaa;
+		echo "<br/>";
+		print_r($request);
 		echo $class->getRoleInfo();
 		
-		$aaa = "aaa";
+		$aaa = array("http"=>"www.aaa.com","com"=>"aaaaa");
 		echo "aaa";
+		//return false;
 		$this->getView()->assign("aaa",$aaa);
-	}	
+	}
+	public function homeaction()
+	{
+		$request = $this->getRequest()->getRequest("app_id",0);
+		$data['error'] =0;
+		$data['errmsg'] = $request;
+		echo json_encode($data);
+		return false;
+	}
 }
 
