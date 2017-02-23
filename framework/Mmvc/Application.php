@@ -24,8 +24,10 @@ class Mmvc_Application
 		}
 		$controller = new $controllerName($view,$request);
 		$actionName = $controllerResult['action']."Action";
-		$controller->$actionName();
-		$controller->render($controllerResult['action'].".php");
+		$result = $controller->$actionName();
+		if($result !== false){
+			$controller->render($controllerResult['action'].".php");
+		}
 	}
 
 	//
